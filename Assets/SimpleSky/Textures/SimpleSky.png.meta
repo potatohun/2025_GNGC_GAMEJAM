@@ -44,3 +44,10 @@ TextureImporter:
     sprites: []
   spritePackingTag: 
   userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 42373
+  packageName: Simple Sky - Cartoon assets
+  packageVersion: 1.2.0
+  assetPath: Assets/SimpleSky/Textures/SimpleSky.png
+  uploadId: 738497

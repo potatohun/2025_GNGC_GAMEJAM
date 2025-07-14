@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public class DreamBlockController : BlockController
@@ -9,15 +8,18 @@ public class DreamBlockController : BlockController
     [SerializeField] private float _floatingSpeed = 5f;
     [SerializeField] private bool _isFloating = false;
 
-    private int _collisionCount = 0;
-    
-    private TMP_Text _collisionCountText;
+    [SerializeField] private int _collisionCount = 0;
+    [SerializeField] private int _dreamBlockCount = 1;
+
+    [SerializeField] List<GameObject> _collidedBlockList = new List<GameObject>();
+
+    public ParticleSystem _floatingParticle;
+    private PolygonCollider2D _polygonCollider;
 
     protected override void Awake() {
         base.Awake();
 
-        _collisionCountText = GetComponentInChildren<TMP_Text>();
-        _collisionCountText.text = _collisionCount.ToString();
+        _polygonCollider = this.GetComponent<PolygonCollider2D>();
     }
 
     protected override void Update() {
@@ -29,19 +31,12 @@ public class DreamBlockController : BlockController
     }
 
     protected override void OnCollisionEnter2D(Collision2D collision) {
-        // 꿈 블럭끼리 부딪히면 병합 후 SetStop 호출
-        if (collision.gameObject.CompareTag("DreamBlock")) {
-            // 병합
-            SetFloatingStop();
-        }
-        
-        // 떠오르는 블럭 충돌 처리
-        if(_isFloating) {
-            if (collision.gameObject.CompareTag("RealityBlock")) {
-                UpdateCollisionCount(1);
-                if(_collisionCount >= 1) {
-                    SetFloatingStop();
-                }
+        if(collision.gameObject.CompareTag("RealityBlock")) {
+            if(!_collidedBlockList.Contains(collision.gameObject))
+                _collidedBlockList.Add(collision.gameObject);
+
+            if(_isFloating) {
+                SetFloatingStop();
             }
         }
 
@@ -51,10 +46,12 @@ public class DreamBlockController : BlockController
 
     void OnCollisionExit2D(Collision2D collision) {
         if(collision.gameObject.CompareTag("RealityBlock")) {
-            UpdateCollisionCount(-1);
-            if(_collisionCount <= 0) {
-                SetFloatingStart();
-            }
+            if(_collidedBlockList.Contains(collision.gameObject))
+                _collidedBlockList.Remove(collision.gameObject);
+
+                if(_collidedBlockList.Count == 0) {
+                    SetFloatingStart();
+                }
         }
     }
 
@@ -66,21 +63,30 @@ public class DreamBlockController : BlockController
     
     private void SetFloatingStart() {
         _isFloating = true;
+        _rigidbody.bodyType = RigidbodyType2D.Dynamic;
+        _rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
+        _rigidbody.velocity = Vector2.zero;
         _rigidbody.gravityScale = 0f;
-        _rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation; // 회전만 고정
+
+        _floatingParticle.Play();
     }
     
     private void SetFloatingStop() {
-        _rigidbody.velocity = Vector2.zero;
         _isFloating = false;
-        _rigidbody.constraints = RigidbodyConstraints2D.FreezeAll; // 완전 고정
+         _rigidbody.bodyType = RigidbodyType2D.Static;
+        _rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+
+        _floatingParticle.Stop();
     }
 
-    private void UpdateCollisionCount(int value) {
-        _collisionCount += value;
-        if(_collisionCount < 0)
-            _collisionCount = 0;
+    public override void FixBlock() {
+        base.FixBlock();
+        _isFloating = false;
+        _floatingParticle.Stop();
+        _rigidbody.bodyType = RigidbodyType2D.Static;
+    }
 
-        _collisionCountText.text = _collisionCount.ToString();
+    public bool GetFloating() {
+        return _isFloating;
     }
 }

@@ -12,21 +12,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: block_s
       objectReference: {fileID: 0}
+    - target: {fileID: 1797444708474104107, guid: e76ba7c054441f04792b8a5753cf744e, type: 3}
+      propertyPath: m_Mass
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7137469177188779276, guid: e76ba7c054441f04792b8a5753cf744e, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: c55fca03a506878408a68e279cde47ad, type: 3}
+      objectReference: {fileID: 21300000, guid: 14674eacaf578714da22caf98043ecaf, type: 3}
     - target: {fileID: 7137469177188779276, guid: e76ba7c054441f04792b8a5753cf744e, type: 3}
       propertyPath: m_Color.b
-      value: 0.2028302
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7137469177188779276, guid: e76ba7c054441f04792b8a5753cf744e, type: 3}
       propertyPath: m_Color.g
-      value: 0.2028302
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7137469177188779276, guid: e76ba7c054441f04792b8a5753cf744e, type: 3}
       propertyPath: m_Color.r
-      value: 0.2028302
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7950131001061224489, guid: e76ba7c054441f04792b8a5753cf744e, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
@@ -146,7 +150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8720894794974688037, guid: e76ba7c054441f04792b8a5753cf744e, type: 3}
       propertyPath: _fallSpeed
-      value: 5
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8720894794974688037, guid: e76ba7c054441f04792b8a5753cf744e, type: 3}
       propertyPath: _isControl
@@ -154,10 +158,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8720894794974688037, guid: e76ba7c054441f04792b8a5753cf744e, type: 3}
       propertyPath: _moveSpeed
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 8720894794974688037, guid: e76ba7c054441f04792b8a5753cf744e, type: 3}
+      propertyPath: _collisionEffect
+      value: 
+      objectReference: {fileID: 6765520093003425846}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e76ba7c054441f04792b8a5753cf744e, type: 3}
+--- !u!198 &6765520093003425846 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7447559358330822918, guid: e76ba7c054441f04792b8a5753cf744e, type: 3}
+  m_PrefabInstance: {fileID: 4231412684484856112}
+  m_PrefabAsset: {fileID: 0}
