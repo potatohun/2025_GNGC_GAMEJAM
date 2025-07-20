@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 [System.Serializable]
 public class SoundData {
@@ -11,6 +12,7 @@ public class SoundData {
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance;
+    [SerializeField] private AudioMixer _audioMixer;
 
     [SerializeField] private List<SoundData> _soundList;
 
@@ -33,5 +35,16 @@ public class SoundManager : MonoBehaviour
         if(soundData != null) {
             _audioSource.PlayOneShot(soundData.clip);
         }
+    }
+
+    public void SetBGMVolume(float volume) {
+        // 0 ~ 1 값을 -80 ~ 20 사이의 값으로 변환
+        float db = Mathf.Lerp(-80, 20, volume);
+        _audioMixer.SetFloat("BGM", db);
+    }
+
+    public void SetSFXVolume(float volume) {
+        float db = Mathf.Lerp(-80, 20, volume);
+        _audioMixer.SetFloat("SFX", db);
     }
 }
