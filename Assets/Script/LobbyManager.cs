@@ -17,7 +17,6 @@ public class LobbyManager : MonoBehaviour
 
     [SerializeField] private Ease _easeMode = Ease.OutBack;
     [SerializeField] private float _easeDuration = 1f;
-    
 
     [Header("Panels")]
     [SerializeField] private RectTransform _mainPanel;
@@ -27,6 +26,7 @@ public class LobbyManager : MonoBehaviour
     [Header("Black Panel")]
     [SerializeField] private RectTransform _blackPanel_up;
     [SerializeField] private RectTransform _blackPanel_down;
+    [SerializeField] private Image _skipIcon;
 
     [Header("Setting Panel")]
     [SerializeField] private TMP_Dropdown _resolutionDropdown;
@@ -36,9 +36,6 @@ public class LobbyManager : MonoBehaviour
 
     private float _screenWidth;
     private float _screenHeight;
-
-    private float _maxWidth;
-    private float _maxHeight;
 
     private List<Resolution> _uniqueResolutions;
     private int _currentResolutionIndex = 0;
@@ -53,6 +50,12 @@ public class LobbyManager : MonoBehaviour
 
     private const string BGM_VOLUME_KEY = "BGMVolume";
     private const string SFX_VOLUME_KEY = "SFXVolume";
+
+    // 인트로 스킵 관련 변수
+    private bool _isIntroPlaying = false;
+    private float _keyHoldTime = 0f;
+    private const float _requiredHoldTime = 1f; // 1초간 누르기
+    private bool _hasSkipped = false;
 
     void Awake(){
         // Resolution Dropdown Setting
@@ -129,15 +132,12 @@ public class LobbyManager : MonoBehaviour
         if (PlayerPrefs.HasKey(RESOLUTION_INDEX_KEY)) {
             int savedResolutionIndex = PlayerPrefs.GetInt(RESOLUTION_INDEX_KEY);
             // 저장된 인덱스가 유효한 범위인지 확인
-            if (savedResolutionIndex >= 0 && savedResolutionIndex < _uniqueResolutions.Count) {
+            if (savedResolutionIndex >= 0 && savedResolutionIndex < _uniqueResolutions.Count)
                 _currentResolutionIndex = savedResolutionIndex;
-            }
-            else {
+            else
                 _currentResolutionIndex = _uniqueResolutions.Count - 1;
-            }
-        } else {
+        } else
             _currentResolutionIndex = _uniqueResolutions.Count - 1;
-        }
 
         // 저장된 윈도우 모드 불러오기
         if (PlayerPrefs.HasKey(WINDOW_MODE_KEY)) {
@@ -233,6 +233,14 @@ public class LobbyManager : MonoBehaviour
         FocusBlackPanel();
         _fullCanvas.DOAnchorPosY(_screenHeight, _easeDuration).SetEase(_easeMode).OnComplete(() => {
             _introDirector.Play();
+            _isIntroPlaying = true;
+            _hasSkipped = false;
+            _keyHoldTime = 0f;
+            // 스킵 아이콘 초기화
+            if (_skipIcon != null) {
+                _skipIcon.fillAmount = 0f;
+                _skipIcon.gameObject.SetActive(true);
+            }
             Invoke("CloseBlackPanel", _durationIntro - 1f);
             Invoke("LoadGameScene", _durationIntro);
         });
@@ -240,6 +248,11 @@ public class LobbyManager : MonoBehaviour
 
     public void LoadGameScene() {
         _introDirector.Stop();
+        _isIntroPlaying = false;
+        // 스킵 아이콘 숨기기
+        if (_skipIcon != null) {
+            _skipIcon.gameObject.SetActive(false);
+        }
         SceneManager.LoadScene("Game");
     }
 
@@ -314,5 +327,55 @@ public class LobbyManager : MonoBehaviour
         _blackPanel_down.anchoredPosition = new Vector2(0, 0);
         _blackPanel_up.DOAnchorPosY(_screenHeight * 0.5f, _easeDuration).SetEase(_easeMode);
         _blackPanel_down.DOAnchorPosY(-_screenHeight * 0.5f, _easeDuration).SetEase(_easeMode);
+    }
+
+    void Update() {
+        // 인트로가 플레이 중일 때만 키 입력 체크
+        if (_isIntroPlaying && !_hasSkipped) {
+            CheckIntroSkip();
+        }
+    }
+
+    private void CheckIntroSkip() {
+        // 아무 키나 누르고 있는지 확인 (스페이스바, 엔터, 아무 키나)
+        if (Input.anyKey) {
+            _keyHoldTime += Time.deltaTime;
+            
+            // 스킵 아이콘 fill 업데이트
+            if (_skipIcon != null) {
+                _skipIcon.fillAmount = _keyHoldTime / _requiredHoldTime;
+            }
+            
+            // 1초간 누르면 인트로 스킵
+            if (_keyHoldTime >= _requiredHoldTime) {
+                SkipIntro();
+            }
+        } else {
+            // 키를 놓으면 타이머 리셋
+            _keyHoldTime = 0f;
+            // 스킵 아이콘 fill 리셋
+            if (_skipIcon != null) {
+                _skipIcon.fillAmount = 0f;
+            }
+        }
+    }
+
+    private void SkipIntro() {
+        if (_hasSkipped) return; // 이미 스킵했으면 중복 실행 방지
+        
+        _hasSkipped = true;
+        _isIntroPlaying = false;
+        
+        // 스킵 아이콘 숨기기
+        if (_skipIcon != null) {
+            _skipIcon.gameObject.SetActive(false);
+        }
+        
+        // 인트로 디렉터 정지
+        _introDirector.Stop();
+        
+        // 게임 씬으로 이동
+        CloseBlackPanel();
+        Invoke("LoadGameScene", 1);
     }
 }
