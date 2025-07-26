@@ -27,6 +27,9 @@ public class BlockController : MonoBehaviour
         // 초기화
         _rigidbody = GetComponent<Rigidbody2D>();
         _collider = GetComponent<PolygonCollider2D>();
+        
+        // 초기 투명도 설정 (컨트롤 상태일 때 투명)
+        UpdateBlockTransparency();
     }
 
     protected virtual void Start() {
@@ -63,6 +66,32 @@ public class BlockController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 블록의 투명도를 상태에 따라 업데이트합니다.
+    /// </summary>
+    private void UpdateBlockTransparency()
+    {
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+        {
+            if (_isFixed)
+            {
+                // 고정된 블록은 회색
+                spriteRenderer.color = new Color(0.5f, 0.5f, 0.5f, 1f);
+            }
+            else if (_isControl)
+            {
+                // 컨트롤 상태일 때 반투명
+                spriteRenderer.color = new Color(1f, 1f, 1f, 0.5f);
+            }
+            else
+            {
+                // 컨트롤이 끝나면 완전 불투명
+                spriteRenderer.color = new Color(1f, 1f, 1f, 1f);
+            }
+        }
+    }
+
     protected virtual void OnCollisionEnter2D(Collision2D collision) {
         if(_isControl == false)
             return;
@@ -80,8 +109,11 @@ public class BlockController : MonoBehaviour
     }
 
     void SetControl(bool isControl) {
-        // 조작 상태태
+        // 조작 상태
         _isControl = isControl;
+        
+        // 투명도 업데이트
+        UpdateBlockTransparency();
     }
 
     public void SetFall() {
@@ -95,6 +127,9 @@ public class BlockController : MonoBehaviour
         _isControl = false;
 
         _rigidbody.velocity = Vector2.zero;
+        
+        // 투명도 업데이트 (컨트롤이 끝났으므로 불투명하게)
+        UpdateBlockTransparency();
         
         // 콜백 호출
         if(_onCollisionEnter == null)
@@ -115,11 +150,19 @@ public class BlockController : MonoBehaviour
         _isFalling = false;
         _isFixed = true;
 
-        _rigidbody.bodyType = RigidbodyType2D.Static;
         this.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f);
+        _rigidbody.bodyType = RigidbodyType2D.Static;
+        _rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+        
+        // 투명도 업데이트 (고정된 블록은 회색으로)
+        UpdateBlockTransparency();
     }
     public bool GetIsControl() {
         return _isControl;
+    }
+
+    public bool GetIsFalling() {
+        return _isFalling;
     }
 
     public bool GetIsFixed() {

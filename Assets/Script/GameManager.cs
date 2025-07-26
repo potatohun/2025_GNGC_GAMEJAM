@@ -107,6 +107,7 @@ public class GameManager : MonoBehaviour
 
         // 하트를 점차 어둡게 만드는 DOTween 애니메이션
         if (_currentHeart >= 0 && _currentHeart < _heartList.Count) {
+            _heartList[_currentHeart].DOKill();
             _heartList[_currentHeart].DOColor(new Color(0.25f, 0.25f, 0.25f), 0.5f).OnComplete(() => {
                 if (_currentHeart == 0) {
                     Debug.Log("GameOver");
@@ -117,7 +118,24 @@ public class GameManager : MonoBehaviour
                     _finalHeightText.text = _maxHeight.ToString("F0") + "m";
                     BlockManager.Instance.EndGame();
                 }
-            });
+            });     
         }
-    }    
+    }
+    
+    public void Heal() {
+        // 체력이 최대가 아닐 때만 회복
+        if(_currentHeart >= _heartList.Count)
+            return;
+
+        _heartList[_currentHeart].DOKill();
+        _heartList[_currentHeart].DOColor(new Color(1, 1, 1), 0.5f);
+
+        _currentHeart++;
+        if(_currentHeart >= _heartList.Count)
+            _currentHeart = _heartList.Count;
+    }
+
+    public float GetMaxHeight() {
+        return _maxHeight;
+    }
 }

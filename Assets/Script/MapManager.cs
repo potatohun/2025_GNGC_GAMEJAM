@@ -7,7 +7,7 @@ public class MapManager : MonoBehaviour
 {
     public static MapManager Instance;
 
-    [SerializeField] private CameraController _cameraController;
+        
     [SerializeField] private Transform _lookAtTarget;
     [SerializeField] private int _level = 1;
     [SerializeField] private int _MoveOffset = 30;
@@ -16,25 +16,37 @@ public class MapManager : MonoBehaviour
     [SerializeField] private bool _canLevelUp = true;
 
     private BoxCollider2D _boxCollider;
-
+    private CameraController _cameraController;
+    private SpawnPointController _spawnPointController;
     void Awake() {
         if(Instance == null)
             Instance = this;
         else
             Destroy(this.gameObject);
 
-        _cameraController = this.GetComponentInChildren<CameraController>();
         _boxCollider = this.GetComponent<BoxCollider2D>();
+        _cameraController = this.GetComponentInChildren<CameraController>();
+        _spawnPointController = this.GetComponentInChildren<SpawnPointController>();
     }
 
     void LevelUp() {
         // 블럭 매니저 정지
         BlockManager.Instance.SetCanSpawn(false);
-        BlockManager.Instance.FixAllBlock();
+        BlockManager.Instance.FixAllBlocks();
 
         // 레벨 업
         _level++;
         SoundManager.Instance.PlaySound("LevelUp");
+
+        // 아이템 생성 (카메라 이동 전)
+        if (ItemManager.Instance != null)
+        {
+            ItemManager.Instance.SpawnItemOnLevelUp();
+        }
+        else
+        {
+            Debug.LogWarning("ItemManager.Instance is null. Cannot spawn items.");
+        }
 
         // 카메라 이동
         float targetY = _lookAtTarget.position.y + _MoveOffset;
@@ -43,6 +55,7 @@ public class MapManager : MonoBehaviour
             _boxCollider.offset += new Vector2(0, _MoveOffset);
             BlockManager.Instance.SetCanSpawn(true);
             BlockManager.Instance.SpawnBlock();
+            _spawnPointController.UpdateMoveSetting(_level);
             _canLevelUp = true;
         });
     }
