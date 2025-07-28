@@ -32,7 +32,7 @@ public class ItemController : MonoBehaviour
         // 사운드 재생
         if (SoundManager.Instance != null)
         {
-            SoundManager.Instance.PlaySound("ItemCollect");
+            SoundManager.Instance.PlaySound("GetItem");
         }
 
         // 아이템 제거
