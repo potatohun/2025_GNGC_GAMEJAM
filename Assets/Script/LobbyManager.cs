@@ -26,6 +26,7 @@ public class LobbyManager : MonoBehaviour
     [Header("Black Panel")]
     [SerializeField] private RectTransform _blackPanel_up;
     [SerializeField] private RectTransform _blackPanel_down;
+    [SerializeField] private GameObject _skipHolder;
     [SerializeField] private Image _skipIcon;
 
     [Header("Setting Panel")]
@@ -239,7 +240,7 @@ public class LobbyManager : MonoBehaviour
             // 스킵 아이콘 초기화
             if (_skipIcon != null) {
                 _skipIcon.fillAmount = 0f;
-                _skipIcon.gameObject.SetActive(true);
+                _skipHolder.SetActive(true);
             }
             Invoke("CloseBlackPanel", _durationIntro - 1f);
             Invoke("LoadGameScene", _durationIntro);
@@ -251,7 +252,7 @@ public class LobbyManager : MonoBehaviour
         _isIntroPlaying = false;
         // 스킵 아이콘 숨기기
         if (_skipIcon != null) {
-            _skipIcon.gameObject.SetActive(false);
+            _skipHolder.SetActive(false);
         }
         SceneManager.LoadScene("Game");
     }

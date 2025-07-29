@@ -82,7 +82,7 @@ public class DreamBlockController : BlockController
         _rigidbody.bodyType = RigidbodyType2D.Dynamic;
         _rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
         _rigidbody.velocity = Vector2.zero;
-        _currentFloatingSpeed = 0.1f;
+        _currentFloatingSpeed = 0.5f;
         _rigidbody.gravityScale = 0f;
 
         _floatingParticle.Play();

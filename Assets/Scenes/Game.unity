@@ -5028,9 +5028,9 @@ MonoBehaviour:
   _itemPrefabs:
   - height: -1
     itemPrefab: {fileID: 0}
-  - height: 15
+  - height: 12.5
     itemPrefab: {fileID: 3738087113791941272, guid: 152199c3d4e805445be8509f27a56296, type: 3}
-  - height: 20
+  - height: 25
     itemPrefab: {fileID: 3738087113791941272, guid: 88c20a865b9c05d42a6a128b71650f7b, type: 3}
   _spawnWidthMin: -30
   _spawnWidthMax: 30
@@ -5136,7 +5136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lookAtTarget: {fileID: 88949140}
   _level: 1
-  _MoveOffset: 25
+  _MoveOffset: 30
   _moveDuration: 3
   _canLevelUp: 1
 --- !u!61 &1218612737
@@ -8729,11 +8729,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2047748276689371844, guid: 58bd3b91f10bce84ca563ff9699971ac, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -18.96618
+      value: -18.966194
       objectReference: {fileID: 0}
     - target: {fileID: 2047748276689371844, guid: 58bd3b91f10bce84ca563ff9699971ac, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 20.056202
+      value: 36.306202
       objectReference: {fileID: 0}
     - target: {fileID: 3890707571709293696, guid: 58bd3b91f10bce84ca563ff9699971ac, type: 3}
       propertyPath: m_LocalPosition.y
