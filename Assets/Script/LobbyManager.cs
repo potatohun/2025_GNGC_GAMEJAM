@@ -367,9 +367,9 @@ public class LobbyManager : MonoBehaviour
         _hasSkipped = true;
         _isIntroPlaying = false;
         
-        // 스킵 아이콘 숨기기
+        // 스킵 아이콘을 꽉 찬 상태로 유지
         if (_skipIcon != null) {
-            _skipIcon.gameObject.SetActive(false);
+            _skipIcon.fillAmount = 1f;
         }
         
         // 인트로 디렉터 정지

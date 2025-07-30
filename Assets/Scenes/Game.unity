@@ -5030,7 +5030,7 @@ MonoBehaviour:
     itemPrefab: {fileID: 0}
   - height: 12.5
     itemPrefab: {fileID: 3738087113791941272, guid: 152199c3d4e805445be8509f27a56296, type: 3}
-  - height: 25
+  - height: 20
     itemPrefab: {fileID: 3738087113791941272, guid: 88c20a865b9c05d42a6a128b71650f7b, type: 3}
   _spawnWidthMin: -30
   _spawnWidthMax: 30
@@ -5136,7 +5136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lookAtTarget: {fileID: 88949140}
   _level: 1
-  _MoveOffset: 30
+  _MoveOffset: 25
   _moveDuration: 3
   _canLevelUp: 1
 --- !u!61 &1218612737
