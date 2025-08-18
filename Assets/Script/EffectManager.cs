@@ -56,11 +56,6 @@ public class EffectManager : MonoBehaviour
         }
     }
 
-    private void Start() {
-        // test
-        PlayEffect(EffectType.IceItem);
-    }
-
     private void InitializeEffectData()
     {
         effectDataDict.Clear();
