@@ -8,6 +8,7 @@ public enum EffectType {
     LevelUp,
     IceItem,
     HealItem,
+    RocketItem,
 }
 
 [System.Serializable]
@@ -137,21 +138,18 @@ public class EffectManager : MonoBehaviour
 
     private Sequence CreateEffectSequence(EffectData effectData)
     {
-        Image effectImage = effectData.effectImage;
-        if (effectImage == null) return null;
-
         Sequence sequence = DOTween.Sequence();
-        
-        // Fade In
-        sequence.Append(effectImage.DOFade(1f, effectData.fadeInDuration)
-            .SetEase(effectData.easeType));
-        
-        // Hold
-        sequence.AppendInterval(effectData.holdDuration);
-        
-        // Fade Out
-        sequence.Append(effectImage.DOFade(0f, effectData.fadeOutDuration)
-            .SetEase(effectData.easeType));
+
+        Image effectImage = effectData.effectImage;
+        if (effectImage != null) 
+        {
+            // Fade In
+            sequence.Append(effectImage.DOFade(1f, effectData.fadeInDuration).SetEase(effectData.easeType));
+            // Hold
+            sequence.AppendInterval(effectData.holdDuration);
+            // Fade Out
+            sequence.Append(effectImage.DOFade(0f, effectData.fadeOutDuration).SetEase(effectData.easeType));
+        }
         
         // 카메라 쉐이크 실행 (이펙트 시작과 동시에)
         if (_globalCameraShakeEnabled && effectData.enableCameraShake)

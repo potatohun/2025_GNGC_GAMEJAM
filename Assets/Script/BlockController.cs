@@ -57,11 +57,11 @@ public class BlockController : MonoBehaviour
             // Q와 E를 이용한 Z축 회전
             if (Input.GetKey(KeyCode.Q)) {
                 // Q키: -Z 방향 회전 (반시계 방향)
-                transform.Rotate(0, 0, 180f * Time.deltaTime);
+                transform.Rotate(0, 0, 90f * Time.deltaTime);
             }
             if (Input.GetKey(KeyCode.E)) {
                 // E키: +Z 방향 회전 (시계 방향)
-                transform.Rotate(0, 0, -180f * Time.deltaTime);
+                transform.Rotate(0, 0, -90f * Time.deltaTime);
             }
         }
     }
@@ -121,23 +121,21 @@ public class BlockController : MonoBehaviour
         _isFalling = true;
     }
 
-    protected virtual void SetStop() {
+    public virtual void SetStop() {
         // 떨어지기 멈춤 상태
         _isFalling = false;
         _isControl = false;
-
-        _rigidbody.velocity = Vector2.zero;
-        
-        // 투명도 업데이트 (컨트롤이 끝났으므로 불투명하게)
-        UpdateBlockTransparency();
         
         // 콜백 호출
         if(_onCollisionEnter == null)
             return;
 
         _onCollisionEnter.Invoke();
-
         _onCollisionEnter = null;
+        
+        // 컨트롤이 끝났으므로 불투명하고 속도 제어
+        UpdateBlockTransparency();
+        _rigidbody.velocity = Vector2.zero;
     }
 
     public void SetOnCollisionEnter(UnityAction action) {

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
 
 public class BlockManager : MonoBehaviour
@@ -157,8 +158,13 @@ public class BlockManager : MonoBehaviour
 
     public void FixAllBlocks()
     {
+        // 블록 고정 전 컨트롤 상태 종료
+        if(_currentBlockController != null)
+            _currentBlockController.SetStop();
+
         FixBlockList(_spawnedRealityBlocks);
         FixBlockList(_spawnedDreamBlocks);
+
         ClearAllLists();
     }
 

@@ -14,7 +14,7 @@ public class ItemController : MonoBehaviour
         if (other.CompareTag("RealityBlock"))
         {
             BlockController blockController = other.GetComponent<BlockController>();
-            if (blockController != null && blockController.GetIsFalling() == false)
+            if (blockController != null && blockController.GetIsFalling() == false && blockController.GetIsFixed() == false)
             {
                 _isUsed = true;
                 UseItem();

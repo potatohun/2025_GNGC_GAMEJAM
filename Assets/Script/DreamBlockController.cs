@@ -70,7 +70,7 @@ public class DreamBlockController : BlockController
         }
     }
 
-    protected override void SetStop() {
+    public override void SetStop() {
         base.SetStop();
 
         SetFloatingStart();
