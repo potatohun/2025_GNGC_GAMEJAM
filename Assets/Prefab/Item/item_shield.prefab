@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6158846521622973235}
   - component: {fileID: 6464245516928437308}
   - component: {fileID: 6119395104581908761}
-  - component: {fileID: 7177946006749655695}
+  - component: {fileID: 6033448860824386376}
   m_Layer: 0
   m_Name: item_shield
   m_TagString: RealityBlock
@@ -135,7 +135,7 @@ PolygonCollider2D:
       - {x: -0.075, y: -0.08}
       - {x: 0.075, y: -0.08}
   m_UseDelaunayMesh: 0
---- !u!114 &7177946006749655695
+--- !u!114 &6033448860824386376
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,6 +144,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 3738087113791941272}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f49ec66326308144a38dffa9d15c5df, type: 3}
+  m_Script: {fileID: 11500000, guid: 97c8e89f42ed80e419f3aeea103c21c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
