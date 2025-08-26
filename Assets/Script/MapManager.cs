@@ -69,12 +69,38 @@ public class MapManager : MonoBehaviour
             if(blockController == null)
                 Debug.Log("blockController is null");
 
-            if(blockController.GetIsControl() == false) {
+            if(blockController.GetIsControl() == false && blockController.GetIsFixed() == false) {
                 if(_canLevelUp) {
                     _canLevelUp = false;
                     LevelUp();
                 }
             }
         }
+    }
+
+    public void RocketItemEffect() {
+        _canLevelUp = false;
+
+        // 블럭 매니저 정지
+        BlockManager.Instance.SetCanSpawn(false);
+        BlockManager.Instance.FixAllBlocks();
+
+        // 레벨 업
+        _level += 3;
+
+        // 카메라 이동
+        float targetY = _lookAtTarget.position.y + _MoveOffset * 3;
+        _lookAtTarget.DOMoveY(targetY, _moveDuration * 2).SetEase(Ease.InCirc).OnComplete(()=>
+        {
+            _boxCollider.offset += new Vector2(0, _MoveOffset * 3);
+            BlockManager.Instance.SetCanSpawn(true);
+            BlockManager.Instance.SpawnBlock();
+            _spawnPointController.UpdateMoveSetting(_level);
+            _canLevelUp = true;
+        });
+    }
+
+    public Transform GetLookAtTarget() {
+        return _lookAtTarget;
     }
 }
