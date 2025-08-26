@@ -9,6 +9,7 @@ public enum EffectType {
     IceItem,
     HealItem,
     RocketItem,
+    ShieldItem,
 }
 
 [System.Serializable]

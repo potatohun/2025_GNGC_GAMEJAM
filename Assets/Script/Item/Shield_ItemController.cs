@@ -2,17 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shield_ItemController : MonoBehaviour
+public class Shield_ItemController : ItemController
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void UseItem()
     {
+        base.UseItem();
         
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        GameManager.Instance.AddShieldItem(1);
     }
 }

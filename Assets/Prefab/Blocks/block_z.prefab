@@ -189,6 +189,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8720894794974688037, guid: e76ba7c054441f04792b8a5753cf744e, type: 3}
+      propertyPath: _moveSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8720894794974688037, guid: e76ba7c054441f04792b8a5753cf744e, type: 3}
       propertyPath: _collisionEffect
       value: 
       objectReference: {fileID: 6765520093003425846}

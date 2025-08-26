@@ -32,8 +32,19 @@ public class GameManager : MonoBehaviour
     public GameObject _bgmObject;
     public GameObject _gameOverBgmObject;
 
+    [Header("Shield")]
+    [SerializeField] private GameObject _GetshieldObject;
+    [SerializeField] private GameObject _UseShieldObject;
+    [SerializeField] private int _shieldItemCount = 0;
+    [SerializeField] private int _shieldTime = 10;
+    [SerializeField] private bool _isShield = false;
+
+    private Coroutine _shieldCoroutine;
+
     // private
     private bool _isPause = false;
+
+    
     
     void Awake() {
         if(Instance == null)
@@ -99,11 +110,32 @@ public class GameManager : MonoBehaviour
 
     public void Damage() {
         // 이미 게임 오버 상태라면 데미지를 받지 않음
-        if (_currentHeart <= 0) {
+        if (_currentHeart <= 0)
+            return;
+
+        // 방패면 데미지를 입지 않음
+        if(_isShield)
+        {
+            SoundManager.Instance.PlaySound("UseShield");
             return;
         }
 
+        // 방패 아이템이 있으면 방패 사용
+        if(_shieldItemCount > 0) {
+            _shieldItemCount--;
+            this.SetShield(_shieldTime);
+            SoundManager.Instance.PlaySound("UseShield");
+
+            // 방패 아이템이 없으면 방패 아이템 활성화 안함
+            if(_shieldItemCount == 0) {
+                _GetshieldObject.SetActive(false);
+            }
+            return;
+        }
+
+        // 하트 감소 (데미지 입음)
         _currentHeart--;
+        SoundManager.Instance.PlaySound("TrapTrigger");
 
         // 하트를 점차 어둡게 만드는 DOTween 애니메이션
         if (_currentHeart >= 0 && _currentHeart < _heartList.Count) {
@@ -137,5 +169,35 @@ public class GameManager : MonoBehaviour
 
     public float GetMaxHeight() {
         return _maxHeight;
+    }
+
+    public void AddShieldItem(int count) {
+        _shieldItemCount += count;
+        if(_shieldItemCount > 0)
+            _GetshieldObject.SetActive(true);
+    }
+
+    public void SetShield(int time) {
+        _isShield = true;
+        _GetshieldObject.SetActive(false);
+        _UseShieldObject.SetActive(true);
+
+        //EffectManager.Instance.PlayEffect(EffectType.ShieldItem);
+
+        if(_shieldCoroutine != null)
+            StopCoroutine(_shieldCoroutine);
+
+        _shieldCoroutine = StartCoroutine(ResetShield(time));
+    }
+
+    private IEnumerator ResetShield(int time) {
+        yield return new WaitForSeconds(time);
+        _isShield = false;
+        _UseShieldObject.SetActive(false);
+
+        if(_shieldItemCount != 0)
+            _GetshieldObject.SetActive(true);
+        
+        _shieldCoroutine = null;
     }
 }
