@@ -5240,12 +5240,6 @@ MonoBehaviour:
     itemPrefab: {fileID: 3738087113791941272, guid: 60f823f5db7cea34da61199073688f61, type: 3}
   - height: 20
     itemPrefab: {fileID: 3738087113791941272, guid: 60f823f5db7cea34da61199073688f61, type: 3}
-  - height: 20
-    itemPrefab: {fileID: 3738087113791941272, guid: 87f57d5a2f2e33942b570feb99dff1c1, type: 3}
-  - height: 20
-    itemPrefab: {fileID: 3738087113791941272, guid: 87f57d5a2f2e33942b570feb99dff1c1, type: 3}
-  - height: 20
-    itemPrefab: {fileID: 3738087113791941272, guid: 87f57d5a2f2e33942b570feb99dff1c1, type: 3}
   _spawnWidthMin: -30
   _spawnWidthMax: 30
   _spawnedItems: []
