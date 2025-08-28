@@ -202,7 +202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fallSpeed: 7
-  _moveSpeed: 30
+  _moveSpeed: 25
   _isFalling: 1
   _isControl: 1
   _isFixed: 0

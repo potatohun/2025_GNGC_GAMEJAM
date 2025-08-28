@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Random = UnityEngine.Random;
 using UnityEngine;
 
 [System.Serializable]
@@ -32,7 +34,7 @@ public class ItemManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public void SpawnItemOnLevelUp()
+    public void SpawnItemOnLevelUp(Vector3 highestBlockPosition)
     {
         if (_itemPrefabs == null || _itemPrefabs.Count == 0)
         {
@@ -54,11 +56,14 @@ public class ItemManager : MonoBehaviour
             return;
         }
 
-        float baseY = GameManager.Instance.GetMaxHeight();
+        float baseY = highestBlockPosition.y;
+        float baseX = highestBlockPosition.x;
 
         // 랜덤 위치 계산
         float positionY = baseY + itemHeightSetting.height;
-        float positionX = Random.Range(_spawnWidthMin, _spawnWidthMax);
+        float positionX = baseX > 0 ? _spawnWidthMin : _spawnWidthMax;
+        positionX += Random.Range(-5, 5);
+        
         Vector3 spawnPosition = new Vector3(positionX, positionY, 0f);
 
         // 아이템 생성

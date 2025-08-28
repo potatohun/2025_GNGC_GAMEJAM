@@ -167,6 +167,14 @@ public class GameManager : MonoBehaviour
             _currentHeart = _heartList.Count;
     }
 
+    public void HealAll() {
+        for(int i = 0; i < _heartList.Count; i++) {
+            _heartList[i].DOKill();
+            _heartList[i].DOColor(new Color(1, 1, 1), 0.5f);
+        }
+        _currentHeart = _heartList.Count;   
+    }
+
     public float GetMaxHeight() {
         return _maxHeight;
     }

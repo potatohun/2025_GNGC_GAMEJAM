@@ -29,7 +29,7 @@ public class MapManager : MonoBehaviour
         _spawnPointController = this.GetComponentInChildren<SpawnPointController>();
     }
 
-    void LevelUp() {
+    void LevelUp(Vector3 highestBlockPosition) {
         // 블럭 매니저 정지
         BlockManager.Instance.SetCanSpawn(false);
         BlockManager.Instance.FixAllBlocks();
@@ -41,7 +41,7 @@ public class MapManager : MonoBehaviour
         // 아이템 생성 (카메라 이동 전)
         if (ItemManager.Instance != null)
         {
-            ItemManager.Instance.SpawnItemOnLevelUp();
+            ItemManager.Instance.SpawnItemOnLevelUp(highestBlockPosition);
         }
         else
         {
@@ -72,7 +72,7 @@ public class MapManager : MonoBehaviour
             if(blockController.GetIsControl() == false && blockController.GetIsFixed() == false) {
                 if(_canLevelUp) {
                     _canLevelUp = false;
-                    LevelUp();
+                    LevelUp(collision.transform.position);
                 }
             }
         }
@@ -86,13 +86,13 @@ public class MapManager : MonoBehaviour
         BlockManager.Instance.FixAllBlocks();
 
         // 레벨 업
-        _level += 3;
+        _level += 4;
 
         // 카메라 이동
-        float targetY = _lookAtTarget.position.y + _MoveOffset * 3;
+        float targetY = _lookAtTarget.position.y + _MoveOffset * 4;
         _lookAtTarget.DOMoveY(targetY, _moveDuration * 2).SetEase(Ease.InCirc).OnComplete(()=>
         {
-            _boxCollider.offset += new Vector2(0, _MoveOffset * 3);
+            _boxCollider.offset += new Vector2(0, _MoveOffset * 4);
             BlockManager.Instance.SetCanSpawn(true);
             BlockManager.Instance.SpawnBlock();
             _spawnPointController.UpdateMoveSetting(_level);

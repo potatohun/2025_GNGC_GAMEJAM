@@ -52,37 +52,19 @@ public class EffectManager : MonoBehaviour
     {
         if (Instance == null) {
             Instance = this;
-            InitializeEffectData();
         } else {
             Destroy(gameObject);
         }
     }
 
-    private void InitializeEffectData()
-    {
-        effectDataDict.Clear();
-        foreach (var effectData in effectDataList)
-        {
-            if (effectData.effectImage != null)
-            {
-                effectDataDict[effectData.effectType] = effectData;
-                // 초기 상태 설정
-                Color color = effectData.effectImage.color;
-                color.a = 0f;
-                effectData.effectImage.color = color;
-            }
-        }
-    }
-
     public void PlayEffect(EffectType effectType)
     {
-        if (!effectDataDict.ContainsKey(effectType))
+        EffectData effectData = effectDataList.Find(x => x.effectType == effectType);
+        if (effectData == null)
         {
             Debug.LogWarning($"Effect {effectType} not found in EffectDataList!");
             return;
         }
-
-        EffectData effectData = effectDataDict[effectType];
         
         // 이미 실행 중인 이펙트가 있다면 중지
         if (activeEffectSequences.ContainsKey(effectType))

@@ -152,6 +152,9 @@ public class BlockManager : MonoBehaviour
         if (_currentBlockController == null)
             return;
 
+        if(_canSpawn == false)
+            return;
+
         HandleBlockCollision();
         ScheduleNextSpawn();
     }
