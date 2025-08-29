@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject _GetshieldObject;
     [SerializeField] private GameObject _UseShieldObject;
     [SerializeField] private int _shieldItemCount = 0;
-    [SerializeField] private int _shieldTime = 10;
+    [SerializeField] private int _shieldTime = 30;
     [SerializeField] private bool _isShield = false;
 
     private Coroutine _shieldCoroutine;
@@ -101,6 +101,9 @@ public class GameManager : MonoBehaviour
             _maxHeight = maxHeight;
             SetPlayerPosition();
             _maxHeightText.text = _maxHeight.ToString("F0") + "m";
+
+            // 진행도 증가
+            ProgressManager.Instance.SetCurrentScore(_maxHeight);
         }
     }
 

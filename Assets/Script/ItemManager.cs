@@ -21,6 +21,10 @@ public class ItemManager : MonoBehaviour
 
     [Header("Spawned Items")]
     [SerializeField] private List<GameObject> _spawnedItems = new List<GameObject>();
+    
+    // 아이템 생성 순서 추적
+    private int _itemSpawnCount = 0;
+    private readonly int[] _initialItemOrder = { 2, 3, 4, 5 }; // 하트, 얼음, 쉴드, 로켓 순서
 
     private void Awake()
     {
@@ -42,17 +46,31 @@ public class ItemManager : MonoBehaviour
             return;
         }
 
-        // 랜덤 아이템 선택
-        int randomItemIndex = Random.Range(0, _itemPrefabs.Count);
-        if(randomItemIndex == 0) {
+        int itemIndex;
+        
+        // 처음 4번은 고정 순서로 생성
+        if (_itemSpawnCount < 4)
+        {
+            itemIndex = _initialItemOrder[_itemSpawnCount];
+            Debug.Log($"Fixed item spawn #{_itemSpawnCount + 1}: Index {itemIndex}");
+        }
+        else
+        {
+            // 5번째 이후부터는 랜덤 생성 (0번 제외)
+            itemIndex = Random.Range(1, _itemPrefabs.Count);
+            Debug.Log($"Random item spawn #{_itemSpawnCount + 1}: Index {itemIndex}");
+        }
+        
+        if(itemIndex == 0) {
             // Do Nothing
             return;
         }
-        ItemHeightSetting itemHeightSetting = _itemPrefabs[randomItemIndex];
+        
+        ItemHeightSetting itemHeightSetting = _itemPrefabs[itemIndex];
 
         if (itemHeightSetting.itemPrefab == null)
         {
-            Debug.LogError($"Item prefab at index {randomItemIndex} is null!");
+            Debug.LogError($"Item prefab at index {itemIndex} is null!");
             return;
         }
 
@@ -72,7 +90,8 @@ public class ItemManager : MonoBehaviour
         if (spawnedItem != null)
         {
             _spawnedItems.Add(spawnedItem);
-            Debug.Log($"Item spawned at position: {spawnPosition}, Item: {itemHeightSetting.itemPrefab.name}");
+            _itemSpawnCount++; // 아이템 생성 카운트 증가
+            Debug.Log($"Item spawned at position: {spawnPosition}, Item: {itemHeightSetting.itemPrefab.name}, Spawn Count: {_itemSpawnCount}");
         }
         else
         {
