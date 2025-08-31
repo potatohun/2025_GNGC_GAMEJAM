@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
         _isPause = false;
         _gameOverUI.SetActive(false);
         _pauseUI.SetActive(false);
+        DataManager.Instance.SetPause(false);
 
         // 일시정지 UI
         _resumeButton.onClick.AddListener(() =>
@@ -67,6 +68,9 @@ public class GameManager : MonoBehaviour
             _isPause = false;
             Time.timeScale = 1;
             _pauseUI.SetActive(false);
+
+            // 데이터 관리자에 일시정지 상태 전달
+            DataManager.Instance.SetPause(false);
         });
 
         _lobbyButton.onClick.AddListener(() =>
@@ -74,6 +78,12 @@ public class GameManager : MonoBehaviour
             SoundManager.Instance.PlaySound("ButtonClick");
             _isPause = false;
             Time.timeScale = 1;
+
+            // 데이터 관리자에 플레이 시간 및 플레이 횟수
+            DataManager.Instance.SetPause(true);
+            DataManager.Instance.AddPlayTime();
+            DataManager.Instance.AddPlayCount();
+
             SceneManager.LoadScene("Intro");
         });
 
@@ -91,6 +101,9 @@ public class GameManager : MonoBehaviour
             _isPause = !_isPause;
             Time.timeScale = _isPause ? 0 : 1;
             _pauseUI.SetActive(_isPause);
+
+            // 데이터 관리자에 일시정지 상태 전달
+            DataManager.Instance.SetPause(_isPause);
 
             EventSystem.current.SetSelectedGameObject(null);
         }
@@ -152,6 +165,11 @@ public class GameManager : MonoBehaviour
                     _gameOverBgmObject.SetActive(true);
                     _finalHeightText.text = _maxHeight.ToString("F0") + "m";
                     BlockManager.Instance.EndGame();
+
+                    // 데이터 관리자에 플레이 시간 및 플레이 횟수
+                    DataManager.Instance.SetPause(true);
+                    DataManager.Instance.AddPlayTime();
+                    DataManager.Instance.AddPlayCount();
                 }
             });     
         }

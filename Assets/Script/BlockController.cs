@@ -96,6 +96,8 @@ public class BlockController : MonoBehaviour
         if(_isControl == false)
             return;
 
+        _rigidbody.velocity = Vector2.zero;
+
         int contactCount = collision.contactCount;
         ContactPoint2D contact = collision.contacts[contactCount - 1];
         Vector2 pos = contact.point;

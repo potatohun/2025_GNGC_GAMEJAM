@@ -41,7 +41,8 @@ public class MapManager : MonoBehaviour
         // 아이템 생성 (카메라 이동 전)
         if (ItemManager.Instance != null)
         {
-            ItemManager.Instance.SpawnItemOnLevelUp(highestBlockPosition);
+            //ItemManager.Instance.SpawnItemOnLevelUp(highestBlockPosition);
+            ItemManager.Instance.CheckGetNewItem(highestBlockPosition);
         }
         else
         {
