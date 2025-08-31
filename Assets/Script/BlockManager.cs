@@ -152,6 +152,9 @@ public class BlockManager : MonoBehaviour
         if (_currentBlockController == null)
             return;
 
+        if(_canSpawn == false)
+            return;
+
         HandleBlockCollision();
         ScheduleNextSpawn();
     }
@@ -166,6 +169,14 @@ public class BlockManager : MonoBehaviour
         FixBlockList(_spawnedDreamBlocks);
 
         ClearAllLists();
+    }
+
+    public void FixAllBlocksExceptControlBlock()
+    {
+        FixBlockListExceptControlBlock(_spawnedRealityBlocks);
+        FixBlockListExceptControlBlock(_spawnedDreamBlocks);
+
+        ClearAllListsExceptControlBlock();
     }
 
     public void SetCanSpawn(bool canSpawn)
@@ -427,12 +438,51 @@ public class BlockManager : MonoBehaviour
         }
     }
 
+    private void FixBlockListExceptControlBlock(List<Transform> blockList)
+    {
+        foreach (Transform block in blockList)
+        {
+            if (block == null) continue;
+            
+            BlockController blockController = block.GetComponent<BlockController>();
+            if (blockController != null)
+            {
+                if (blockController == _currentBlockController)
+                    continue;
+
+                blockController.FixBlock();
+                blockController.enabled = false;
+            }
+        }
+    }
+
     private void ClearAllLists()
     {
         _spawnedRealityBlocks.Clear();
         _spawnedDreamBlocks.Clear();
         _targetBlocks.Clear();
     }
+
+    private void ClearAllListsExceptControlBlock()
+    {
+        // 현재 컨트롤 블록을 제외한 나머지 블록들 clear
+        _spawnedRealityBlocks.Clear();
+        _spawnedDreamBlocks.Clear();
+        
+        // 현재 컨트롤 블록이 있다면 다시 추가
+        if (_currentBlockController != null)
+        {
+            if (_currentBlockController.gameObject.CompareTag("RealityBlock"))
+            {
+                _spawnedRealityBlocks.Add(_currentBlockController.transform);
+            }
+            else
+            {
+                _spawnedDreamBlocks.Add(_currentBlockController.transform);
+            }
+        }
+    }
+
 
     private void DetermineNextBlock()
     {

@@ -18,7 +18,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1797444708474104107, guid: e76ba7c054441f04792b8a5753cf744e, type: 3}
       propertyPath: m_Mass
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7137469177188779276, guid: e76ba7c054441f04792b8a5753cf744e, type: 3}
       propertyPath: m_Sprite
@@ -202,15 +202,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fallSpeed: 7
-  _moveSpeed: 15
+  _moveSpeed: 25
   _isFalling: 1
   _isControl: 1
   _isFixed: 0
   _collisionEffect: {fileID: 6765520093003425846}
-  _floatingSpeed: 2.5
+  _currentFloatingSpeed: 0.1
+  _maxFloatingSpeed: 5
   _isFloating: 0
-  _collisionCount: 0
-  _dreamBlockCount: 1
   _collidedBlockList: []
   _floatingParticle: {fileID: 7670580122117646981}
 --- !u!4 &6158846521622973235 stripped

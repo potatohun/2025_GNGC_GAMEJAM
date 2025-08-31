@@ -8,7 +8,7 @@ public class Ice_ItemController : ItemController
     protected override void UseItem()
     {
         base.UseItem();
-        BlockManager.Instance.FixAllBlocks();
+        BlockManager.Instance.FixAllBlocksExceptControlBlock();
         EffectManager.Instance.PlayEffect(EffectType.IceItem);
     }
 }

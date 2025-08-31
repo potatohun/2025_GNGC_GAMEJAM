@@ -17,5 +17,6 @@ public class Rocket_ItemController : ItemController
         Instantiate(_object_rocket, MapManager.Instance.GetLookAtTarget().position, Quaternion.identity);
         MapManager.Instance.RocketItemEffect();
         EffectManager.Instance.PlayEffect(EffectType.RocketItem);
+        SoundManager.Instance.PlaySound("UseRocket");
     }
 }

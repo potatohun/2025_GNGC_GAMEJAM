@@ -7,6 +7,6 @@ public class Heal_ItemController : ItemController
     protected override void UseItem()
     {
         base.UseItem();
-        GameManager.Instance.Heal();
+        GameManager.Instance.HealAll();
     }
 }

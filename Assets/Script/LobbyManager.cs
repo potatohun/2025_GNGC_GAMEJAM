@@ -20,6 +20,7 @@ public class LobbyManager : MonoBehaviour
 
     [Header("Panels")]
     [SerializeField] private RectTransform _mainPanel;
+    [SerializeField] private RectTransform _topPanel;
     [SerializeField] private RectTransform _leftPanel;
     [SerializeField] private RectTransform _rightPanel;
     
@@ -35,6 +36,13 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] private Slider _bgmSlider;
     [SerializeField] private Slider _sfxSlider;
 
+    [Header("Record Panel")]    
+    [SerializeField] private TMP_Text _playtime_text;
+    [SerializeField] private TMP_Text _maxheight_text;
+    [SerializeField] private TMP_Text _playcount_text;
+
+    [Header("Help Panel")]
+    [SerializeField] public GameObject[] _helpPanels;
     private float _screenWidth;
     private float _screenHeight;
 
@@ -57,6 +65,9 @@ public class LobbyManager : MonoBehaviour
     private float _keyHoldTime = 0f;
     private const float _requiredHoldTime = 1f; // 1초간 누르기
     private bool _hasSkipped = false;
+
+    // help panel 관련 변수
+    private int _currentHelpPanelIndex = 0;
 
     void Awake(){
         // Resolution Dropdown Setting
@@ -99,6 +110,16 @@ public class LobbyManager : MonoBehaviour
         _sfxSlider.value = _sfxVolume;
         SoundManager.Instance.SetBGMVolume(_bgmVolume);
         SoundManager.Instance.SetSFXVolume(_sfxVolume);
+
+        // Record Panel Settings
+        LoadRecord();
+
+        // Help Panel Settings
+        foreach(var panel in _helpPanels) {
+            panel.SetActive(false);
+        }
+        _currentHelpPanelIndex = 0;
+        _helpPanels[_currentHelpPanelIndex].SetActive(true);
 
         // Resolution Dropdown Event
         _resolutionDropdown.onValueChanged.AddListener((index) => {
@@ -161,6 +182,24 @@ public class LobbyManager : MonoBehaviour
         } else {
             _sfxVolume = 0.8f;
         }
+    }
+
+    public void LoadRecord() {
+        // 플레이타임을 [00h00m00s] 형태로 변환
+        float playtimeSeconds = DataManager.Instance.GetPlayTime();
+        int hours = Mathf.FloorToInt(playtimeSeconds / 3600);
+        int minutes = Mathf.FloorToInt((playtimeSeconds % 3600) / 60);
+        int seconds = Mathf.FloorToInt(playtimeSeconds % 60);
+        _playtime_text.text = string.Format("[{0:D2}h{1:D2}m{2:D2}s]", hours, minutes, seconds);
+        
+        // 최고 높이를 [00m] 형태로 변환
+        float highScore = DataManager.Instance.GetHighScore();
+        int highScoreMeters = Mathf.FloorToInt(highScore);
+        _maxheight_text.text = string.Format("[{0:D2}m]", highScoreMeters);
+        
+        // 플레이 횟수를 [0] 형태로 변환
+        int playCount = DataManager.Instance.GetPlayCount();
+        _playcount_text.text = string.Format("[{0}]", playCount);
     }
 
     // 지원하는 4가지 해상도만 반환
@@ -266,8 +305,18 @@ public class LobbyManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
     }
 
+    public void OnClickRecordButton() {
+        SoundManager.Instance.PlaySound("ButtonClick");
+        _fullCanvas.DOAnchorPosY(-_screenHeight, _easeDuration).SetEase(_easeMode).OnComplete(() => {
+        });
+
+        // 키보드 입력 무시
+        EventSystem.current.SetSelectedGameObject(null);
+    }
+
     public void OnClickBackButton() {
         SoundManager.Instance.PlaySound("ButtonClick");
+        _fullCanvas.DOAnchorPosY(0, _easeDuration).SetEase(_easeMode);
         _fullCanvas.DOAnchorPosX(0, _easeDuration).SetEase(_easeMode);
 
         // 키보드 입력 무시
@@ -291,6 +340,33 @@ public class LobbyManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
     }
 
+    public void OnClickDataResetButton() {
+        SoundManager.Instance.PlaySound("ButtonClick");
+        DataManager.Instance.DataReset();
+        LoadRecord();
+    }
+
+    public void OnClickNextHelpButton(bool right) {
+        SoundManager.Instance.PlaySound("ButtonClick");
+        if(right) {
+            _currentHelpPanelIndex++;
+            if(_currentHelpPanelIndex >= _helpPanels.Length) {
+                _currentHelpPanelIndex = 0;
+            }
+        } else {
+            _currentHelpPanelIndex--;
+            if(_currentHelpPanelIndex < 0) {
+                _currentHelpPanelIndex = _helpPanels.Length - 1;
+            }
+        }
+
+        foreach(var panel in _helpPanels) {
+            panel.SetActive(false);
+        }
+        _helpPanels[_currentHelpPanelIndex].SetActive(true);
+    }
+
+
     public void FocusBlackPanel() {
         _blackPanel_up.DOAnchorPosY(_screenHeight * 0.25f, _easeDuration).SetEase(_easeMode);
         _blackPanel_down.DOAnchorPosY(-_screenHeight * 0.25f, _easeDuration).SetEase(_easeMode);
@@ -309,6 +385,9 @@ public class LobbyManager : MonoBehaviour
         // Main Panel Setting
         _mainPanel.sizeDelta = new Vector2(_screenWidth, _screenHeight);
         _mainPanel.anchoredPosition = new Vector2(0, 0);
+
+        _topPanel.sizeDelta = new Vector2(_screenWidth, _screenHeight);
+        _topPanel.anchoredPosition = new Vector2(0, _screenHeight);
 
         _leftPanel.sizeDelta = new Vector2(_screenWidth, _screenHeight);
         _leftPanel.anchoredPosition = new Vector2(-_screenWidth, 0);

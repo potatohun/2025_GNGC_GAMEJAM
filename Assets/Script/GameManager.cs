@@ -32,8 +32,19 @@ public class GameManager : MonoBehaviour
     public GameObject _bgmObject;
     public GameObject _gameOverBgmObject;
 
+    [Header("Shield")]
+    [SerializeField] private GameObject _GetshieldObject;
+    [SerializeField] private GameObject _UseShieldObject;
+    [SerializeField] private int _shieldItemCount = 0;
+    [SerializeField] private int _shieldTime = 30;
+    [SerializeField] private bool _isShield = false;
+
+    private Coroutine _shieldCoroutine;
+
     // private
     private bool _isPause = false;
+
+    
     
     void Awake() {
         if(Instance == null)
@@ -48,6 +59,7 @@ public class GameManager : MonoBehaviour
         _isPause = false;
         _gameOverUI.SetActive(false);
         _pauseUI.SetActive(false);
+        DataManager.Instance.SetPause(false);
 
         // 일시정지 UI
         _resumeButton.onClick.AddListener(() =>
@@ -56,6 +68,9 @@ public class GameManager : MonoBehaviour
             _isPause = false;
             Time.timeScale = 1;
             _pauseUI.SetActive(false);
+
+            // 데이터 관리자에 일시정지 상태 전달
+            DataManager.Instance.SetPause(false);
         });
 
         _lobbyButton.onClick.AddListener(() =>
@@ -63,6 +78,12 @@ public class GameManager : MonoBehaviour
             SoundManager.Instance.PlaySound("ButtonClick");
             _isPause = false;
             Time.timeScale = 1;
+
+            // 데이터 관리자에 플레이 시간 및 플레이 횟수
+            DataManager.Instance.SetPause(true);
+            DataManager.Instance.AddPlayTime();
+            DataManager.Instance.AddPlayCount();
+
             SceneManager.LoadScene("Intro");
         });
 
@@ -81,6 +102,9 @@ public class GameManager : MonoBehaviour
             Time.timeScale = _isPause ? 0 : 1;
             _pauseUI.SetActive(_isPause);
 
+            // 데이터 관리자에 일시정지 상태 전달
+            DataManager.Instance.SetPause(_isPause);
+
             EventSystem.current.SetSelectedGameObject(null);
         }
     }
@@ -90,6 +114,9 @@ public class GameManager : MonoBehaviour
             _maxHeight = maxHeight;
             SetPlayerPosition();
             _maxHeightText.text = _maxHeight.ToString("F0") + "m";
+
+            // 진행도 증가
+            ProgressManager.Instance.SetCurrentScore(_maxHeight);
         }
     }
 
@@ -99,11 +126,32 @@ public class GameManager : MonoBehaviour
 
     public void Damage() {
         // 이미 게임 오버 상태라면 데미지를 받지 않음
-        if (_currentHeart <= 0) {
+        if (_currentHeart <= 0)
+            return;
+
+        // 방패면 데미지를 입지 않음
+        if(_isShield)
+        {
+            SoundManager.Instance.PlaySound("UseShield");
             return;
         }
 
+        // 방패 아이템이 있으면 방패 사용
+        if(_shieldItemCount > 0) {
+            _shieldItemCount--;
+            this.SetShield(_shieldTime);
+            SoundManager.Instance.PlaySound("UseShield");
+
+            // 방패 아이템이 없으면 방패 아이템 활성화 안함
+            if(_shieldItemCount == 0) {
+                _GetshieldObject.SetActive(false);
+            }
+            return;
+        }
+
+        // 하트 감소 (데미지 입음)
         _currentHeart--;
+        SoundManager.Instance.PlaySound("TrapTrigger");
 
         // 하트를 점차 어둡게 만드는 DOTween 애니메이션
         if (_currentHeart >= 0 && _currentHeart < _heartList.Count) {
@@ -117,6 +165,11 @@ public class GameManager : MonoBehaviour
                     _gameOverBgmObject.SetActive(true);
                     _finalHeightText.text = _maxHeight.ToString("F0") + "m";
                     BlockManager.Instance.EndGame();
+
+                    // 데이터 관리자에 플레이 시간 및 플레이 횟수
+                    DataManager.Instance.SetPause(true);
+                    DataManager.Instance.AddPlayTime();
+                    DataManager.Instance.AddPlayCount();
                 }
             });     
         }
@@ -135,7 +188,45 @@ public class GameManager : MonoBehaviour
             _currentHeart = _heartList.Count;
     }
 
+    public void HealAll() {
+        for(int i = 0; i < _heartList.Count; i++) {
+            _heartList[i].DOKill();
+            _heartList[i].DOColor(new Color(1, 1, 1), 0.5f);
+        }
+        _currentHeart = _heartList.Count;   
+    }
+
     public float GetMaxHeight() {
         return _maxHeight;
+    }
+
+    public void AddShieldItem(int count) {
+        _shieldItemCount += count;
+        if(_shieldItemCount > 0)
+            _GetshieldObject.SetActive(true);
+    }
+
+    public void SetShield(int time) {
+        _isShield = true;
+        _GetshieldObject.SetActive(false);
+        _UseShieldObject.SetActive(true);
+
+        //EffectManager.Instance.PlayEffect(EffectType.ShieldItem);
+
+        if(_shieldCoroutine != null)
+            StopCoroutine(_shieldCoroutine);
+
+        _shieldCoroutine = StartCoroutine(ResetShield(time));
+    }
+
+    private IEnumerator ResetShield(int time) {
+        yield return new WaitForSeconds(time);
+        _isShield = false;
+        _UseShieldObject.SetActive(false);
+
+        if(_shieldItemCount != 0)
+            _GetshieldObject.SetActive(true);
+        
+        _shieldCoroutine = null;
     }
 }

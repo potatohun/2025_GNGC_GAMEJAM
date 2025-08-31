@@ -57,11 +57,11 @@ public class BlockController : MonoBehaviour
             // Q와 E를 이용한 Z축 회전
             if (Input.GetKey(KeyCode.Q)) {
                 // Q키: -Z 방향 회전 (반시계 방향)
-                transform.Rotate(0, 0, 90f * Time.deltaTime);
+                transform.Rotate(0, 0, 150f * Time.deltaTime);
             }
             if (Input.GetKey(KeyCode.E)) {
                 // E키: +Z 방향 회전 (시계 방향)
-                transform.Rotate(0, 0, -90f * Time.deltaTime);
+                transform.Rotate(0, 0, -150f * Time.deltaTime);
             }
         }
     }
@@ -95,6 +95,8 @@ public class BlockController : MonoBehaviour
     protected virtual void OnCollisionEnter2D(Collision2D collision) {
         if(_isControl == false)
             return;
+
+        _rigidbody.velocity = Vector2.zero;
 
         int contactCount = collision.contactCount;
         ContactPoint2D contact = collision.contacts[contactCount - 1];
@@ -177,7 +179,6 @@ public class BlockController : MonoBehaviour
         SetStop();
 
         GameManager.Instance.Damage();
-        SoundManager.Instance.PlaySound("TrapTrigger");
 
         this.GetComponent<SpriteRenderer>().DOFade(0, 0.5f).OnComplete(() => {
             this.gameObject.SetActive(false);
