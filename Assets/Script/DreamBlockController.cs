@@ -20,8 +20,8 @@ public class DreamBlockController : BlockController
         _polygonCollider = this.GetComponent<PolygonCollider2D>();
     }
 
-    protected override void Update() {
-        base.Update();
+    protected override void FixedUpdate() {
+        base.FixedUpdate();
 
         if(_isFloating) {
             // 최대 속도 값을 초과하지 않도록 조절

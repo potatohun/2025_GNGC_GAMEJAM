@@ -36,7 +36,7 @@ public class BlockController : MonoBehaviour
         _rigidbody.gravityScale = 1f;
     }
 
-    protected virtual void Update() {
+    protected virtual void FixedUpdate() {
         // 떨어지기
         if(_isFalling) {
             _rigidbody.velocity = new Vector2(0, -_fallSpeed);
@@ -96,7 +96,13 @@ public class BlockController : MonoBehaviour
         if(_isControl == false)
             return;
 
+        _isControl = false;
+
         _rigidbody.velocity = Vector2.zero;
+        Rigidbody2D collision_rigidbody = collision.gameObject.GetComponent<Rigidbody2D>();
+        if(collision_rigidbody != null) {
+            collision_rigidbody.velocity = Vector2.zero;
+        }
 
         int contactCount = collision.contactCount;
         ContactPoint2D contact = collision.contacts[contactCount - 1];

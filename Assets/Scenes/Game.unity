@@ -6166,14 +6166,6 @@ MonoBehaviour:
   _spawnWidthMin: -15
   _spawnWidthMax: 15
   _spawnTargetItemDataList:
-  - spawnHeight: -1
-    itemPrefab: {fileID: 0}
-  - spawnHeight: -1
-    itemPrefab: {fileID: 0}
-  - spawnHeight: -1
-    itemPrefab: {fileID: 0}
-  - spawnHeight: -1
-    itemPrefab: {fileID: 0}
   - spawnHeight: 12.5
     itemPrefab: {fileID: 3738087113791941272, guid: 152199c3d4e805445be8509f27a56296, type: 3}
   _spawnedItems: []
