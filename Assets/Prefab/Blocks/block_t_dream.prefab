@@ -302,6 +302,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _fallSpeed: 7
   _moveSpeed: 25
+  _rotationSpeed: 225
+  _holdTimeRequired: 0
+  _snapPauseTime: 0.25
+  _snapThreshold: 5
   _isFalling: 1
   _isControl: 1
   _isFixed: 0

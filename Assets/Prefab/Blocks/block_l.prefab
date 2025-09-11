@@ -192,6 +192,18 @@ PrefabInstance:
       propertyPath: _snapDuration
       value: 0.1
       objectReference: {fileID: 0}
+    - target: {fileID: 8720894794974688037, guid: e76ba7c054441f04792b8a5753cf744e, type: 3}
+      propertyPath: _rotationSpeed
+      value: 225
+      objectReference: {fileID: 0}
+    - target: {fileID: 8720894794974688037, guid: e76ba7c054441f04792b8a5753cf744e, type: 3}
+      propertyPath: _snapPauseTime
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8720894794974688037, guid: e76ba7c054441f04792b8a5753cf744e, type: 3}
+      propertyPath: _holdTimeRequired
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
