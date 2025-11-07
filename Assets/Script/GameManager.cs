@@ -25,12 +25,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Button _lobbyButton;
     [SerializeField] private Button _gameOverButton;
 
+    [SerializeField] private Button _gameEndButton;
+
     [Header("UI")]
     public GameObject _pauseUI;
     public GameObject _gameOverUI;
+
+    public GameObject _gameEndUI;
     public TMP_Text _finalHeightText;
     public GameObject _bgmObject;
     public GameObject _gameOverBgmObject;
+    public GameObject _gameEndBgmObject;
 
     [Header("Shield")]
     [SerializeField] private GameObject _GetshieldObject;
@@ -94,6 +99,13 @@ public class GameManager : MonoBehaviour
             // 현재 씬을 다시 로드
             SceneManager.LoadScene("Intro");
         });
+
+        _gameEndButton.onClick.AddListener(() =>
+        {
+            SoundManager.Instance.PlaySound("ButtonClick");
+            // 현재 씬을 다시 로드
+            SceneManager.LoadScene("Intro");
+        });
     }
 
     void Update() {
@@ -112,11 +124,17 @@ public class GameManager : MonoBehaviour
     public void SetMaxHeight(float maxHeight) {
         if(maxHeight > _maxHeight) {
             _maxHeight = maxHeight;
-            SetPlayerPosition();
-            _maxHeightText.text = _maxHeight.ToString("F0") + "m";
+            if(_maxHeight >= 1000) {
+                _maxHeight = 1000;
+                ProgressManager.Instance.SetCurrentScore(_maxHeight);
+                GameEnd();
+            } else {
+                SetPlayerPosition();
+                _maxHeightText.text = _maxHeight.ToString("F0") + "m";
 
-            // 진행도 증가
-            ProgressManager.Instance.SetCurrentScore(_maxHeight);
+                // 진행도 증가
+                ProgressManager.Instance.SetCurrentScore(_maxHeight);
+            }
         }
     }
 
@@ -228,5 +246,18 @@ public class GameManager : MonoBehaviour
             _GetshieldObject.SetActive(true);
         
         _shieldCoroutine = null;
+    }
+    
+    private void GameEnd() {
+        _gameEndUI.SetActive(true);
+        _bgmObject.SetActive(false);
+        _gameEndBgmObject.SetActive(true);
+        _finalHeightText.text = _maxHeight.ToString("F0") + "m";
+        BlockManager.Instance.EndGame();
+        
+        // 데이터 관리자에 플레이 시간 및 플레이 횟수
+        DataManager.Instance.SetPause(true);
+        DataManager.Instance.AddPlayTime();
+        DataManager.Instance.AddPlayCount();
     }
 }
