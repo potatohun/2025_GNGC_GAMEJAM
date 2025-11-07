@@ -1560,8 +1560,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1750, y: 400}
-  m_SizeDelta: {x: 1000, y: 300}
+  m_AnchoredPosition: {x: -1750, y: 500}
+  m_SizeDelta: {x: 2000, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &342497908
 MonoBehaviour:
@@ -1610,8 +1610,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 250
-  m_fontSizeBase: 250
+  m_fontSize: 450
+  m_fontSizeBase: 450
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1972,6 +1972,7 @@ GameObject:
   m_Component:
   - component: {fileID: 418295008}
   - component: {fileID: 418295009}
+  - component: {fileID: 418295010}
   m_Layer: 0
   m_Name: Tutorial
   m_TagString: Untagged
@@ -2107,6 +2108,18 @@ MonoBehaviour:
   optionalScrambleMode: 0
   optionalShakeRandomnessMode: 0
   optionalString: 
+--- !u!114 &418295010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418295007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9fc03ccbb37fcf479cdcd8570e18e7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &422193633
 GameObject:
   m_ObjectHideFlags: 0
@@ -2281,7 +2294,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 2
+  m_fontStyle: 1
   m_HorizontalAlignment: 32
   m_VerticalAlignment: 4096
   m_textAlignment: 65535
@@ -4226,8 +4239,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4287189124
-  m_fontColor: {r: 0.5176471, g: 0.3137255, b: 0.5372549, a: 1}
+    rgba: 4283178568
+  m_fontColor: {r: 0.28237358, g: 0.11868274, b: 0.2981131, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -4251,8 +4264,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 17
-  m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_HorizontalAlignment: 32
+  m_VerticalAlignment: 8192
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -6668,8 +6681,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1750, y: 400}
-  m_SizeDelta: {x: 1000, y: 300}
+  m_AnchoredPosition: {x: 1750, y: 500}
+  m_SizeDelta: {x: 2000, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1161087222
 MonoBehaviour:
@@ -6718,8 +6731,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 250
-  m_fontSizeBase: 250
+  m_fontSize: 450
+  m_fontSizeBase: 450
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -7346,7 +7359,7 @@ MonoBehaviour:
   _itemDataList:
   - acquisition: 0
     key: GET_ITEM_HEART_KEY
-    getHeight: 20
+    getHeight: 50
     spawnHeight: 20
     title: heart
     text: Trigger this item with a real block to restore all lost hearts.
@@ -7354,7 +7367,7 @@ MonoBehaviour:
     itemPrefab: {fileID: 3738087113791941272, guid: 88c20a865b9c05d42a6a128b71650f7b, type: 3}
   - acquisition: 0
     key: GET_ITEM_ICE_KEY
-    getHeight: 70
+    getHeight: 200
     spawnHeight: 20
     title: ice
     text: Trigger this item with a real block to freeze all generated blocks.
@@ -7362,7 +7375,7 @@ MonoBehaviour:
     itemPrefab: {fileID: 3738087113791941272, guid: 34229f80bacdc5f48bb1b95a5bf08d4f, type: 3}
   - acquisition: 0
     key: GET_ITEM_SHIELD_KEY
-    getHeight: 145
+    getHeight: 400
     spawnHeight: 20
     title: shield
     text: Trigger this item for a shield that grants 10s of invincibility when you
@@ -7371,7 +7384,7 @@ MonoBehaviour:
     itemPrefab: {fileID: 3738087113791941272, guid: 87f57d5a2f2e33942b570feb99dff1c1, type: 3}
   - acquisition: 0
     key: GET_ITEM_ROCKET_KEY
-    getHeight: 245
+    getHeight: 700
     spawnHeight: 20
     title: rocket
     text: Trigger this item to move a little closer to space.

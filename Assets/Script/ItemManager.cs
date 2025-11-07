@@ -152,6 +152,10 @@ public class ItemManager : MonoBehaviour
             return;
         }
 
+        // 50% 확률로 아이템 생성
+        if (Random.Range(0, 2) != 0)
+            return;
+
         int itemIndex = Random.Range(0, _spawnTargetItemDataList.Count);
         
         SpawnTargetItemData spawnTargetItemData = _spawnTargetItemDataList[itemIndex];
